@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sysguard"
+version = "0.1.0"
+description = "Live Linux admin dashboard for the terminal"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Gypsy-82" }]
+requires-python = ">=3.12"
+dependencies = [
+    "psutil==7.2.2",
+    "textual==8.2.8",
+]
+classifiers = [
+    "Environment :: Console",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Topic :: System :: Monitoring",
+]
+
+[project.urls]
+Homepage = "https://github.com/Gypsy-82/sysguard"
+
+[project.scripts]
+sysguard = "sysguard:main"
+
+[tool.setuptools]
+py-modules = ["sysguard"]
