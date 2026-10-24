@@ -192,14 +192,16 @@ def get_ssh_history():
 
 
 def get_failed_logins():
-    output = run_cmd("journalctl _SYSTEMD_UNIT=sshd.service --no-pager -n 30 --grep='Failed' 2>/dev/null")
+    # Match by syslog identifier, not unit: Debian/Ubuntu name the unit ssh.service
+    # (sshd.service is only an alias), and OpenSSH 9.8+ logs auth from sshd-session.
+    output = run_cmd("journalctl -q -t sshd -t sshd-session --no-pager -n 30 --grep='Failed' 2>/dev/null")
     if not output:
         output = run_cmd("grep 'Failed password' /var/log/auth.log 2>/dev/null | tail -20")
     return output if output else "No failed login attempts found (or insufficient permissions)"
 
 
 def get_sudo_history():
-    output = run_cmd("journalctl _COMM=sudo --no-pager -n 30 2>/dev/null")
+    output = run_cmd("journalctl -q _COMM=sudo --no-pager -n 30 2>/dev/null")
     if not output:
         output = run_cmd("grep 'sudo' /var/log/auth.log 2>/dev/null | tail -20")
     return output if output else "No sudo history available (or insufficient permissions)"
